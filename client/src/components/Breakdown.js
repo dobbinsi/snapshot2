@@ -137,14 +137,15 @@ const Breakdown = () => {
 
   const handleChange = (e) => {
     setSearch(e.target.value);
-    runSDKApi1(e.target.value);
-    runSDKApi2(e.target.value);
-    runSDKApi3(e.target.value);
-    runSDKApi4(e.target.value);
-    runSDKApi5(e.target.value);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    runSDKApi1(search);
+    runSDKApi2(search);
+    runSDKApi3(search);
+    runSDKApi4(search);
+    runSDKApi5(search);
   };
 
   ChartJS.register(
@@ -371,6 +372,7 @@ const Breakdown = () => {
               <input
                 className="space-input"
                 type="text"
+                name="search"
                 placeholder="ex: aave.eth"
                 onChange={handleChange}
               />
@@ -445,6 +447,8 @@ const Breakdown = () => {
                             href={"https://etherscan.io/address/".concat(
                               voter[0]
                             )}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="table-links"
                           >
                             {voter[0]}

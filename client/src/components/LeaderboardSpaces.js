@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flipside } from "@flipsidecrypto/sdk";
-
-const API_KEY = `${process.env.REACT_APP_API_KEY}`;
+import axios from "axios";
 
 const LeaderboardSpaces = () => {
   const [sevenData, setSevenData] = useState([]);
@@ -18,7 +16,7 @@ const LeaderboardSpaces = () => {
   const [yearState, setYearState] = useState(false);
   const [voterSort, setVoterSort] = useState(true);
   const [propSort, setPropSort] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [active1, setActive1] = useState(false);
   const [active2, setActive2] = useState(true);
   const [active3, setActive3] = useState(false);
@@ -79,156 +77,91 @@ const LeaderboardSpaces = () => {
   };
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const querySeven = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 7 GROUP BY space_id ORDER BY unique_voters DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultSeven = flipside.query.run(querySeven).then((records) => {
-        setSevenData(records.rows);
-        setLoading(false);
-      });
-    } catch (error) {
-      console.log("error in SEVEN");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/faf10d6b-2cbe-4424-a3ac-618a7c3f16ba/data/latest"
+      )
+      .then((res) => {
+        setSevenData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryThirty = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 30 GROUP BY space_id ORDER BY unique_voters DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultThirty = flipside.query.run(queryThirty).then((records) => {
-        setThirtyData(records.rows);
-      });
-    } catch (error) {
-      console.log("error in THIRTY");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/01aedd84-8788-41db-ab17-767c2ff36d1c/data/latest"
+      )
+      .then((res) => {
+        setThirtyData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryNinety = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 90 GROUP BY space_id ORDER BY unique_voters DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultNinety = flipside.query.run(queryNinety).then((records) => {
-        setNinetyData(records.rows);
-      });
-    } catch (error) {
-      console.log("error in NINETY");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/e58293ea-0123-4602-80a7-5ecde3892774/data/latest"
+      )
+      .then((res) => {
+        setNinetyData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryYear = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 365 GROUP BY space_id ORDER BY unique_voters DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultYear = flipside.query.run(queryYear).then((records) => {
-        setYearData(records.rows);
-      });
-    } catch (error) {
-      console.log("error in YEAR");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/a34e5ea3-c481-4946-9e71-e73346318693/data/latest"
+      )
+      .then((res) => {
+        setYearData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const querySevenProps = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 7 GROUP BY space_id ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultSevenProps = flipside.query
-        .run(querySevenProps)
-        .then((records) => {
-          setSevenDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in SevenProps");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/2e246d9b-cbc6-4f81-b7e8-56196a6e5288/data/latest"
+      )
+      .then((res) => {
+        setSevenDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryThirtyProps = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 30 GROUP BY space_id ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultThirtyProps = flipside.query
-        .run(queryThirtyProps)
-        .then((records) => {
-          setThirtyDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in ThirtyProps");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/36094d45-e587-4e49-a335-7143664be2df/data/latest"
+      )
+      .then((res) => {
+        setThirtyDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryNinetyProps = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 90 GROUP BY space_id ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultNinetyProps = flipside.query
-        .run(queryNinetyProps)
-        .then((records) => {
-          setNinetyDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in NinetyProps");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/cd2824f3-5b76-4e8f-bd70-bb3c0e51b794/data/latest"
+      )
+      .then((res) => {
+        setNinetyDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryYearProps = {
-      sql: "SELECT space_id, count(DISTINCT proposal_id) AS proposals, count(DISTINCT voter) AS unique_voters FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 365 GROUP BY space_id ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultYearProps = flipside.query
-        .run(queryYearProps)
-        .then((records) => {
-          setYearDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in YearProps");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/bad31efa-3fd4-4fe1-895f-637b756c7fbb/data/latest"
+      )
+      .then((res) => {
+        setYearDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -289,17 +222,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -311,17 +248,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -333,17 +274,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -355,17 +300,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -395,17 +344,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -417,17 +370,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -439,17 +396,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -461,17 +422,21 @@ const LeaderboardSpaces = () => {
                         <tr>
                           <td>
                             <a
-                              href={"https://snapshot.org/#/".concat(space[0])}
+                              href={"https://snapshot.org/#/".concat(
+                                space["SPACE_ID"]
+                              )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["SPACE_ID"]}
                             </a>
                           </td>
                           <td className="validator-voters">
-                            {space[1].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["UNIQUE_VOTERS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}

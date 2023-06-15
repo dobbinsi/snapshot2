@@ -25,7 +25,11 @@ const Header = () => {
   return (
     <div className="header-main">
       <div className="logo">
-        <a href="https://snapshot.org/#/">
+        <a
+          href="https://snapshot.org/#/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {" "}
           <motion.img
             whileHover={{ scale: 1.2 }}

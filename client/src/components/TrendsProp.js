@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flipside } from "@flipsidecrypto/sdk";
+import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,28 +12,26 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-const API_KEY = `${process.env.REACT_APP_API_KEY}`;
-
 const TrendsProp = () => {
   const [propsMonthly, setPropsMonthly] = useState([]);
   const [propsWeekly, setPropsWeekly] = useState([]);
   const [weekState, setWeekState] = useState(false);
   const [monthState, setMonthState] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [active1, setActive1] = useState(false);
   const [active2, setActive2] = useState(true);
 
   const propChartDates = propsMonthly.map((item) => {
-    return item[0].slice(0, 7);
+    return item["MONTH"].slice(0, 7);
   });
   const propChartAmounts = propsMonthly.map((item) => {
-    return item[1];
+    return item["PROPOSAL_COUNT"];
   });
   const propChartDates2 = propsWeekly.map((item) => {
-    return item[0].slice(0, 10);
+    return item["WEEK"].slice(0, 10);
   });
   const propChartAmounts2 = propsWeekly.map((item) => {
-    return item[1];
+    return item["PROPOSAL_COUNT"];
   });
 
   const weekHandler = () => {
@@ -130,44 +128,25 @@ const TrendsProp = () => {
   };
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryPropsMonthly = {
-      sql: "SELECT date_trunc('month', proposal_start_time) as month, count(DISTINCT(proposal_id)) as proposal_count from ethereum.core.ez_snapshot GROUP BY month ORDER BY month",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultPropsMonthly = flipside.query
-        .run(queryPropsMonthly)
-        .then((records) => {
-          setPropsMonthly(records.rows);
-          setLoading(false);
-        });
-    } catch (error) {
-      console.log("error in MONTHLYCHART1");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/f00d9cde-698a-4b88-8e4a-eb34fa28b27d/data/latest"
+      )
+      .then((res) => {
+        setPropsMonthly(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryPropsWeekly = {
-      sql: "SELECT date_trunc('week', proposal_start_time) as week, count(DISTINCT(proposal_id)) as proposal_count from ethereum.core.ez_snapshot GROUP BY week ORDER BY week",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultPropsWeekly = flipside.query
-        .run(queryPropsWeekly)
-        .then((records) => {
-          setPropsWeekly(records.rows);
-        });
-    } catch (error) {
-      console.log("error in WEEKLYCHART1");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/f1c49424-6347-4628-932a-0f947a661d55/data/latest"
+      )
+      .then((res) => {
+        setPropsWeekly(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (

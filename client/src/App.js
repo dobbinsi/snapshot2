@@ -10,21 +10,17 @@ import snapjawn from "./logos/snapshot.svg";
 import { motion } from "framer-motion";
 
 function App() {
-  const [allState, setAllState] = useState({
-    checkedA: false,
-  });
   const [oneState, setOneState] = useState(false);
-
-  const allHandler = (e) => {
-    setAllState({ ...allState, [e.target.name]: e.target.checked });
-    setOneState(!oneState);
-  };
 
   return (
     <div className="wrapper">
       <div className="header-main">
         <div className="logo">
-          <a href="https://snapshot.org/#/">
+          <a
+            href="https://snapshot.org/#/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {" "}
             <motion.img
               whileHover={{ scale: 1.2 }}
@@ -36,7 +32,21 @@ function App() {
           </a>
           <h1>Snapshot Analytics</h1>
         </div>
-        <div className="txt-main"></div>
+        <div className="txt-main">
+          <h3
+            className={`tab ${!oneState ? "active" : ""}`}
+            onClick={() => setOneState(false)}
+          >
+            Macro Trends
+          </h3>
+          <span className="tab-divider">|</span>
+          <h3
+            className={`tab ${oneState ? "active" : ""}`}
+            onClick={() => setOneState(true)}
+          >
+            Search Spaces
+          </h3>
+        </div>
       </div>
       {oneState ? (
         <Breakdown />

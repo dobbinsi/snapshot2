@@ -42,6 +42,35 @@ body {
   height: 50px;
 }
 
+.txt-main {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.tab {
+  position: relative;
+  cursor: pointer;
+}
+
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #ffab33;
+  border-radius: 15px;
+}
+
+.tab-divider {
+  margin: 0px 20px;
+  color: #ffffff;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
 .footer {
   position: relative;
   margin-top: 5vh;

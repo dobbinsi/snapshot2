@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flipside } from "@flipsidecrypto/sdk";
-
-const API_KEY = `${process.env.REACT_APP_API_KEY}`;
+import axios from "axios";
 
 const LeaderboardUsers = () => {
   const [sevenData, setSevenData] = useState([]);
@@ -18,7 +16,7 @@ const LeaderboardUsers = () => {
   const [yearState, setYearState] = useState(false);
   const [voterSort, setVoterSort] = useState(true);
   const [propSort, setPropSort] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [active1, setActive1] = useState(false);
   const [active2, setActive2] = useState(true);
   const [active3, setActive3] = useState(false);
@@ -79,156 +77,91 @@ const LeaderboardUsers = () => {
   };
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const querySeven = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 7 GROUP BY voter ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultSeven = flipside.query.run(querySeven).then((records) => {
-        setSevenData(records.rows);
-        setLoading(false);
-      });
-    } catch (error) {
-      console.log("error in SEVENJAWN2");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/d74f27fd-7f92-479b-b886-e3f5790e81ea/data/latest"
+      )
+      .then((res) => {
+        setSevenData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryThirty = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 30 GROUP BY voter ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultThirty = flipside.query.run(queryThirty).then((records) => {
-        setThirtyData(records.rows);
-      });
-    } catch (error) {
-      console.log("error in THIRTYJAWN2");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/c0978b81-aee1-4d18-ae13-698a6d2deaab/data/latest"
+      )
+      .then((res) => {
+        setThirtyData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryNinety = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 90 GROUP BY voter ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultNinety = flipside.query.run(queryNinety).then((records) => {
-        setNinetyData(records.rows);
-      });
-    } catch (error) {
-      console.log("error in NINETYJAWN2");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/889dc6b7-e7f7-4685-a4c0-033afe510a8f/data/latest"
+      )
+      .then((res) => {
+        setNinetyData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryYear = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 365 GROUP BY voter ORDER BY proposals DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultYear = flipside.query.run(queryYear).then((records) => {
-        setYearData(records.rows);
-      });
-    } catch (error) {
-      console.log("error in YEARJAWN1");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/39f43365-604a-4b3f-ab2c-efca5d4e3e75/data/latest"
+      )
+      .then((res) => {
+        setYearData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const querySevenProps = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 7 GROUP BY voter ORDER BY spaces DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultSevenProps = flipside.query
-        .run(querySevenProps)
-        .then((records) => {
-          setSevenDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in SEVENJAWN");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/f5a01d15-e8ba-4cd4-a951-bf70de31d460/data/latest"
+      )
+      .then((res) => {
+        setSevenDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryThirtyProps = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 30 GROUP BY voter ORDER BY spaces DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultThirtyProps = flipside.query
-        .run(queryThirtyProps)
-        .then((records) => {
-          setThirtyDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in THIRTYJAWN");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/45d58a82-2112-4508-9b03-1221af49e5d4/data/latest"
+      )
+      .then((res) => {
+        setThirtyDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryNinetyProps = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 90 GROUP BY voter ORDER BY spaces DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultNinetyProps = flipside.query
-        .run(queryNinetyProps)
-        .then((records) => {
-          setNinetyDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in NINETYJAWN");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/71c7483d-6b03-474a-a3e6-93003ddba987/data/latest"
+      )
+      .then((res) => {
+        setNinetyDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(API_KEY, "https://api-v2.flipsidecrypto.xyz");
-
-    const queryYearProps = {
-      sql: "SELECT voter, count(DISTINCT space_id) AS spaces, count(DISTINCT proposal_id) AS proposals FROM ethereum.core.ez_snapshot WHERE proposal_start_time >= CURRENT_DATE - 365 GROUP BY voter ORDER BY spaces DESC LIMIT 10",
-      ttlMinutes: 60,
-    };
-
-    try {
-      const resultYearProps = flipside.query
-        .run(queryYearProps)
-        .then((records) => {
-          setYearDataProps(records.rows);
-        });
-    } catch (error) {
-      console.log("error in YEARJAWN");
-      console.log(error);
-    }
+    axios
+      .get(
+        "https://api.flipsidecrypto.com/api/v2/queries/efb8b829-f10c-44ca-8753-641f66da88a2/data/latest"
+      )
+      .then((res) => {
+        setYearDataProps(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -290,16 +223,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -312,16 +249,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -334,16 +275,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -356,16 +301,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -396,16 +345,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -418,16 +371,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -440,16 +397,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -462,16 +423,20 @@ const LeaderboardUsers = () => {
                           <td>
                             <a
                               href={"https://etherscan.io/address/".concat(
-                                space[0]
+                                space["VOTER"]
                               )}
                               className="table-links"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
-                              {space[0]}
+                              {space["VOTER"]}
                             </a>
                           </td>
-                          <td className="validator-voters">{space[1]}</td>
+                          <td className="validator-voters">
+                            {space["SPACES"]}
+                          </td>
                           <td className="validator-shares">
-                            {space[2].toLocaleString()}
+                            {space["PROPOSALS"].toLocaleString()}
                           </td>
                         </tr>
                       ))}
